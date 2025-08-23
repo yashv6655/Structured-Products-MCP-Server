@@ -1,0 +1,32 @@
+{
+  "name": "financial-structured-products-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for financial structured products analysis - payoff diagrams, Monte Carlo simulations, and optimization",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "mcp",
+    "financial",
+    "structured-products",
+    "options",
+    "monte-carlo",
+    "derivatives"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "mathjs": "^12.2.1",
+    "node-fetch": "^3.3.2",
+    "dotenv": "^16.3.1",
+    "ml-matrix": "^6.10.7",
+    "simple-statistics": "^7.8.3",
+    "regression": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
