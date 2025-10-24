@@ -1,6 +1,17 @@
-# Financial Structured Products MCP Server
+# Financial Basic MCP - Advanced Financial Analytics Server
 
 A comprehensive MCP server for analyzing financial structured products, portfolio optimization, and advanced risk analytics, designed for Claude Desktop integration.
+
+## What It Does
+
+This server provides advanced financial analytics capabilities through Claude Desktop integration. It can:
+
+- **Analyze Structured Products** - Generate payoff diagrams for options, autocallables, and barrier products
+- **Optimize Portfolios** - Modern portfolio theory, Black-Litterman, and risk parity optimization
+- **Assess Risk** - Advanced risk metrics including VaR, Sortino ratio, and drawdown analysis
+- **Backtest Strategies** - Historical testing with walk-forward analysis and Monte Carlo validation
+- **Process Market Data** - Real-time market data integration with intelligent caching
+- **Calculate Greeks** - Complete sensitivity analysis for options and derivatives
 
 ## Development Commands
 
@@ -14,6 +25,13 @@ A comprehensive MCP server for analyzing financial structured products, portfoli
   - `node test-phase2.js` (phase 2 tools tests)
 
 ## Architecture
+
+The project consists of several key components:
+
+1. **MCP Server Core** (`server.js`) - Main server with 20+ financial analysis tools
+2. **Financial Tools** (`tools/`) - Specialized financial analysis implementations
+3. **Data Processing** (`utils/`) - Market data integration and caching systems
+4. **Service Layer** (`services/`) - High-level financial services
 
 ### Core Components
 
@@ -72,11 +90,24 @@ A comprehensive MCP server for analyzing financial structured products, portfoli
 - `cache_status`: Cache performance metrics
 - `test_cache`: Cache timing analysis
 
-## Setup & Configuration
+## Setup
 
-### Environment Variables
+### Prerequisites
 
-Required for full functionality:
+- Node.js 18+
+- Alpha Vantage API key (optional, for real market data)
+- Claude Desktop with MCP support
+
+### Installation
+
+1. Clone or download this repository
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Configure environment variables (optional):
 ```bash
 # Alpha Vantage API (for real market data)
 ALPHA_VANTAGE_API_KEY=your_api_key_here
@@ -94,15 +125,13 @@ ALPHA_VANTAGE_RATE_LIMIT_CALLS=5
 ALPHA_VANTAGE_RATE_LIMIT_WINDOW=60000 # 1 minute
 ```
 
-### Installation
+4. Test setup: `npm test`
 
-1. Install dependencies: `npm install`
-2. Configure environment: Copy `.env.example` to `.env` (if available)
-3. Test setup: `npm test`
+## Usage
 
-## Claude Code Integration
+### Claude Desktop Integration
 
-Add this server to your Claude Code MCP configuration:
+Add this server to your Claude Desktop MCP configuration:
 
 ```json
 {
@@ -117,7 +146,23 @@ Add this server to your Claude Code MCP configuration:
 
 Replace `/path/to/your/server.js` with the actual path to this project's server.js file.
 
-## Common Usage Patterns
+### Command Line Testing
+
+```bash
+# Test core functionality
+npm test
+
+# Test market data integration
+node test-alpha-vantage.js
+
+# Test cache performance
+node test-cache.js
+
+# Test advanced tools
+node test-phase2.js
+```
+
+### Common Usage Patterns
 
 ### With Market Data Integration
 ```
@@ -139,6 +184,17 @@ Replace `/path/to/your/server.js` with the actual path to this project's server.
 "Run walk-forward test on risk parity strategy for diversified portfolio" 
 "Analyze advanced risk metrics for equal-weight portfolio of dividend stocks"
 ```
+
+## Safety Features
+
+For financial analysis safety, the server includes multiple protection mechanisms:
+
+- **Input Validation**: Comprehensive parameter validation for all financial calculations
+- **Rate Limiting**: API call limits to prevent excessive market data requests
+- **Error Handling**: Graceful degradation when external services are unavailable
+- **Data Caching**: Intelligent caching to reduce API load and improve performance
+- **Numerical Stability**: Robust mathematical implementations with overflow protection
+- **Audit Logging**: Complete logging of all calculations and market data requests
 
 ## Mathematical Models & Algorithms
 
@@ -265,25 +321,54 @@ Replace `/path/to/your/server.js` with the actual path to this project's server.
 - **Risk Attribution**: Contribution to portfolio variance by factor
 - **Active Share**: Σ|w_p - w_b|/2 (portfolio vs. benchmark differences)
 
-## Key Implementation Notes
+## Project Structure
 
-### Numerical Methods
-- **Matrix Operations**: ml-matrix library for linear algebra
-- **Optimization**: Custom gradient-free methods for portfolio optimization
-- **Root Finding**: Newton-Raphson and bisection methods for implied volatility
-- **Integration**: Trapezoidal rule for numerical integration
+```
+.
+├── .env                 # API keys (not in git)
+├── .gitignore          # Git ignore rules
+├── README.md           # This file
+├── package.json        # Node.js dependencies
+├── server.js           # Main MCP server
+├── tools/              # Financial analysis tools
+│   ├── financial-math.js           # Core financial mathematics
+│   ├── monte-carlo.js              # Monte Carlo simulations
+│   ├── portfolio-optimizer.js       # Portfolio optimization
+│   ├── black-litterman-optimizer.js # Black-Litterman model
+│   ├── risk-parity-optimizer.js    # Risk parity optimization
+│   ├── advanced-risk-analyzer.js   # Advanced risk metrics
+│   ├── backtesting-tools.js        # Backtesting framework
+│   └── scenario-analysis.js        # Stress testing
+├── utils/              # Shared utilities
+│   ├── alpha-vantage-client.js     # Market data client
+│   ├── data-cache.js               # Caching system
+│   ├── portfolio-math.js           # Portfolio mathematics
+│   ├── technical-analysis.js       # Technical indicators
+│   └── backtesting-engine.js       # Backtesting engine
+├── services/           # High-level services
+│   └── market-data.js              # Market data service
+└── test*.js           # Test suites
+```
 
-### Market Data Integration
-- **Real-time quotes**: Alpha Vantage API integration with rate limiting
-- **Historical data**: Automatic volatility calculation from price history
-- **Caching strategy**: Multi-tier TTL caching (quotes 5min, volatility 1hr, rates 24hr)
-- **Fallback**: Graceful degradation when API unavailable
+## Technical Details
 
-### Performance Considerations
-- **Caching**: LRU eviction with configurable TTL per data type
-- **Rate limiting**: Intelligent API call management (5 calls/minute default)
-- **Memory usage**: Bounded cache with configurable max entries (1000 default)
-- **Async processing**: Non-blocking financial calculations
+- **MCP SDK**: @modelcontextprotocol/sdk v1.0.0 for Claude integration
+- **Financial Math**: mathjs, ml-matrix, simple-statistics, regression
+- **Market Data**: Alpha Vantage API with node-fetch
+- **Caching**: Custom in-memory cache with LRU eviction and TTL
+- **Numerical Methods**: Matrix operations, optimization, root finding
+- **Performance**: Multi-tier caching, rate limiting, async processing
+
+## Extending the Server
+
+Want to add new capabilities? The modular architecture makes it easy:
+
+1. **New Financial Tools**: Add implementations to `tools/` directory
+2. **Custom Analysis**: Extend `utils/` with new calculation methods
+3. **Enhanced Caching**: Improve caching strategies in `utils/data-cache.js`
+4. **New Data Sources**: Add market data providers to `utils/alpha-vantage-client.js`
+
+The server will automatically use your new capabilities through the MCP interface.
 
 ## Testing & Debugging
 
@@ -304,6 +389,21 @@ Replace `/path/to/your/server.js` with the actual path to this project's server.
 - Works with or without Alpha Vantage API (degrades gracefully)
 - All dependencies are production-ready packages (mathjs, ml-matrix, etc.)
 
-## Disclaimer
+## Important Safety Notes
 
-This tool is for educational and analysis purposes only. Not intended for actual trading or investment decisions. Always consult with qualified financial professionals for investment advice.
+- This tool is for educational and analysis purposes only
+- Not intended for actual trading or investment decisions
+- Always consult with qualified financial professionals for investment advice
+- Market data is provided for informational purposes only
+- Past performance does not guarantee future results
+
+## Learn More
+
+- [MCP Documentation](https://modelcontextprotocol.io/)
+- [Alpha Vantage API Documentation](https://www.alphavantage.co/documentation/)
+- [Financial Mathematics](https://en.wikipedia.org/wiki/Mathematical_finance)
+- [Portfolio Optimization Theory](https://en.wikipedia.org/wiki/Modern_portfolio_theory)
+
+## License
+
+This is a learning project. Use it to understand financial analytics and MCP integration.
